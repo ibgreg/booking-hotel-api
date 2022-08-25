@@ -3,6 +3,7 @@ package com.ibgregorio.bookinghotel.entity;
 import java.io.Serializable;
 import java.time.LocalDate;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -24,7 +25,7 @@ public class Reservation implements Serializable {
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
 	
-	@OneToOne
+	@OneToOne(cascade = CascadeType.ALL)
 	@JoinColumn(name = "room_id", referencedColumnName = "roomNumber")
 	private Room room;
 	
