@@ -24,6 +24,9 @@ public class Room implements Serializable {
 	
 	@OneToOne(mappedBy = "room")
 	private Reservation reservation;
+	
+	public Room() {
+	}
 
 	public Room(Long roomNumber, Double price, String category, Integer numberOfBeds, boolean balconyAvailable) {
 		super();

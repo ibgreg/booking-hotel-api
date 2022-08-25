@@ -28,6 +28,9 @@ public class Customer implements Serializable {
 	
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
 	private List<Reservation> reservations = new ArrayList<>();
+	
+	public Customer() {
+	}
 
 	public Customer(Long id, String name, String email, String phoneNumber) {
 		super();

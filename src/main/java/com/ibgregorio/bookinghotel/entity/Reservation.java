@@ -31,6 +31,9 @@ public class Reservation implements Serializable {
 	private LocalDate startDate;
 	
 	private LocalDate endDate;
+	
+	public Reservation() {
+	}
 
 	public Reservation(Long id, Customer customer, Room room, LocalDate startDate, LocalDate endDate) {
 		super();
