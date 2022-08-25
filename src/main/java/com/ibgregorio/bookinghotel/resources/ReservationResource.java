@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,7 +20,7 @@ import com.ibgregorio.bookinghotel.entity.Reservation;
 import com.ibgregorio.bookinghotel.services.ReservationService;
 
 @RestController
-@RequestMapping(value = "/resources")
+@RequestMapping(value = "/reservations")
 public class ReservationResource {
 
 	@Autowired
@@ -34,6 +35,15 @@ public class ReservationResource {
 				.path("/{id}").buildAndExpand(reservationEntity.getId()).toUri();
 		
 		return ResponseEntity.created(uri).build();
+	}
+	
+	@PutMapping(value = "/{idReservation}")
+	public ResponseEntity<Void> modifyReservation(@Valid @RequestBody ReservationDTO reservationDto, @PathVariable Long idReservation) {
+		Reservation reservationEntity = reservationService.buildEntityFromDTO(reservationDto);
+		reservationEntity.setId(idReservation);
+		reservationEntity = reservationService.modifyReservation(reservationEntity);
+		
+		return ResponseEntity.noContent().build();
 	}
 	
 	@DeleteMapping(value = "/{idReservation}")

@@ -35,6 +35,14 @@ public class ReservationService {
 		return reservationRepository.save(reservation);
 	}
 	
+	@Transactional
+	public Reservation modifyReservation(Reservation reservation) {
+		Reservation modifiedReservation = findReservationById(reservation.getId());
+		updateReservationData(modifiedReservation, reservation);
+		
+		return reservationRepository.save(modifiedReservation);
+	}
+	
 	public void cancelReservation(Long idReservation) {
 		Reservation selectedReservation = findReservationById(idReservation);
 		
@@ -56,7 +64,10 @@ public class ReservationService {
 				
 		return reservation;
 	}
-
 	
-	
+	private void updateReservationData(Reservation updatedReservation, Reservation reservation) {
+		updatedReservation.setRoom(reservation.getRoom());
+		updatedReservation.setStartDate(reservation.getStartDate());
+		updatedReservation.setEndDate(reservation.getEndDate());
+	}
 }
