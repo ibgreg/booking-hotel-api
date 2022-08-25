@@ -1,5 +1,7 @@
 package com.ibgregorio.bookinghotel.services;
 
+import java.util.Optional;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,10 +24,24 @@ public class ReservationService {
 	@Autowired
 	private RoomRepository roomRepository;
 	
+	
+	public Reservation findReservationById(Long idReservation) {
+		Optional<Reservation> reservation = reservationRepository.findById(idReservation);
+		return reservation.orElse(null);
+	}
+	
 	@Transactional
 	public Reservation placeReservation(Reservation reservation) {
 		return reservationRepository.save(reservation);
 	}
+	
+	public void cancelReservation(Long idReservation) {
+		Reservation selectedReservation = findReservationById(idReservation);
+		
+		if (selectedReservation != null) {
+			reservationRepository.deleteById(selectedReservation.getId());
+		}
+	}	
 	
 	public Reservation buildEntityFromDTO(ReservationDTO reservationDto) {
 		Reservation reservation = new Reservation(
@@ -40,5 +56,7 @@ public class ReservationService {
 				
 		return reservation;
 	}
+
+	
 	
 }

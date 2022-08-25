@@ -6,6 +6,8 @@ import javax.validation.Valid;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -33,4 +35,12 @@ public class ReservationResource {
 		
 		return ResponseEntity.created(uri).build();
 	}
+	
+	@DeleteMapping(value = "/{idReservation}")
+	public ResponseEntity<Void> cancelReservation(@PathVariable Long idReservation) {
+		reservationService.cancelReservation(idReservation);
+		
+		return ResponseEntity.noContent().build();
+	}
+
 }
