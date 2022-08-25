@@ -25,6 +25,15 @@ public class Room implements Serializable {
 	@OneToOne(mappedBy = "room")
 	private Reservation reservation;
 
+	public Room(Long roomNumber, Double price, String category, Integer numberOfBeds, boolean balconyAvailable) {
+		super();
+		this.roomNumber = roomNumber;
+		this.price = price;
+		this.category = category;
+		this.numberOfBeds = numberOfBeds;
+		this.balconyAvailable = balconyAvailable;
+	}
+
 	public Long getRoomNumber() {
 		return roomNumber;
 	}
