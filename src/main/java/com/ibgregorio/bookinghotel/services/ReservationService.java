@@ -64,8 +64,8 @@ public class ReservationService {
 				reservationDto.getId(), 
 				null, 
 				null, 
-				reservationDto.getStartDate(), 
-				reservationDto.getEndDate());
+				reservationDto.getStartDate().atStartOfDay(), 
+				reservationDto.getEndDate().atTime(23, 59, 59));
 		
 		reservation.setCustomer(customerService.findCustomerById(reservationDto.getIdCustomer()));
 		reservation.setRoom(roomService.findRoomByNumber(reservationDto.getIdRoom()));

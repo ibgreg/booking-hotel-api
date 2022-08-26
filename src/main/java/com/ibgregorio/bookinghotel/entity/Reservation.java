@@ -1,7 +1,7 @@
 package com.ibgregorio.bookinghotel.entity;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -21,6 +21,7 @@ public class Reservation implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
+	
 	@ManyToOne
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
@@ -29,14 +30,15 @@ public class Reservation implements Serializable {
 	@JoinColumn(name = "room_id", referencedColumnName = "roomNumber")
 	private Room room;
 	
-	private LocalDate startDate;
 	
-	private LocalDate endDate;
+	private LocalDateTime startDate;
+	
+	private LocalDateTime endDate;
 	
 	public Reservation() {
 	}
 
-	public Reservation(Long id, Customer customer, Room room, LocalDate startDate, LocalDate endDate) {
+	public Reservation(Long id, Customer customer, Room room, LocalDateTime startDate, LocalDateTime endDate) {
 		super();
 		this.id = id;
 		this.customer = customer;
@@ -69,19 +71,19 @@ public class Reservation implements Serializable {
 		this.room = room;
 	}
 
-	public LocalDate getStartDate() {
+	public LocalDateTime getStartDate() {
 		return startDate;
 	}
 
-	public void setStartDate(LocalDate startDate) {
+	public void setStartDate(LocalDateTime startDate) {
 		this.startDate = startDate;
 	}
 
-	public LocalDate getEndDate() {
+	public LocalDateTime getEndDate() {
 		return endDate;
 	}
 
-	public void setEndDate(LocalDate endDate) {
+	public void setEndDate(LocalDateTime endDate) {
 		this.endDate = endDate;
 	}	
 }
