@@ -8,9 +8,8 @@ import org.springframework.transaction.annotation.Transactional;
 
 import com.ibgregorio.bookinghotel.dto.ReservationDTO;
 import com.ibgregorio.bookinghotel.entity.Reservation;
-import com.ibgregorio.bookinghotel.repository.CustomerRepository;
 import com.ibgregorio.bookinghotel.repository.ReservationRepository;
-import com.ibgregorio.bookinghotel.repository.RoomRepository;
+import com.ibgregorio.bookinghotel.services.exception.ObjectNotFoundException;
 
 @Service
 public class ReservationService {
@@ -19,15 +18,16 @@ public class ReservationService {
 	private ReservationRepository reservationRepository;
 	
 	@Autowired
-	private CustomerRepository customerRepository;
+	private CustomerService customerService;
 	
 	@Autowired
-	private RoomRepository roomRepository;
+	private RoomService roomService;
 	
 	
 	public Reservation findReservationById(Long idReservation) {
 		Optional<Reservation> reservation = reservationRepository.findById(idReservation);
-		return reservation.orElse(null);
+		
+		return reservation.orElseThrow(() -> new ObjectNotFoundException("Reservation not found! Id: " + idReservation));
 	}
 	
 	@Transactional
@@ -59,8 +59,8 @@ public class ReservationService {
 				reservationDto.getStartDate(), 
 				reservationDto.getEndDate());
 		
-		reservation.setCustomer(customerRepository.findById(reservationDto.getIdCustomer()).orElse(null));
-		reservation.setRoom(roomRepository.findById(reservationDto.getIdRoom()).orElse(null));
+		reservation.setCustomer(customerService.findCustomerById(reservationDto.getIdCustomer()));
+		reservation.setRoom(roomService.findRoomByNumber(reservationDto.getIdRoom()));
 				
 		return reservation;
 	}
