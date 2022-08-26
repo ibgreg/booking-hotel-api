@@ -6,6 +6,8 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToOne;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Room implements Serializable {
 	
@@ -22,6 +24,7 @@ public class Room implements Serializable {
 	
 	private boolean balconyAvailable;
 	
+	@JsonIgnore
 	@OneToOne(mappedBy = "room")
 	private Reservation reservation;
 	

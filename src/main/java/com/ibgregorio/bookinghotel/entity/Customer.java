@@ -11,6 +11,8 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 public class Customer implements Serializable {
 	
@@ -26,6 +28,7 @@ public class Customer implements Serializable {
 	
 	private String phoneNumber;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
 	private List<Reservation> reservations = new ArrayList<>();
 	

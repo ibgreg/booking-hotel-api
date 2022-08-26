@@ -1,5 +1,6 @@
 package com.ibgregorio.bookinghotel.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -7,6 +8,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import com.ibgregorio.bookinghotel.dto.ReservationDTO;
+import com.ibgregorio.bookinghotel.entity.Customer;
 import com.ibgregorio.bookinghotel.entity.Reservation;
 import com.ibgregorio.bookinghotel.repository.ReservationRepository;
 import com.ibgregorio.bookinghotel.services.exception.ObjectNotFoundException;
@@ -28,6 +30,12 @@ public class ReservationService {
 		Optional<Reservation> reservation = reservationRepository.findById(idReservation);
 		
 		return reservation.orElseThrow(() -> new ObjectNotFoundException("Reservation not found! Id: " + idReservation));
+	}
+	
+	public List<Reservation> findReservationsByCustomer(Long idCustomer) {
+		Customer selectedCustomer = customerService.findCustomerById(idCustomer);
+		
+		return reservationRepository.findByCustomer(selectedCustomer);
 	}
 	
 	@Transactional
