@@ -26,7 +26,7 @@ public class Reservation implements Serializable {
 	@JoinColumn(name = "customer_id")
 	private Customer customer;
 	
-	@OneToOne(cascade = CascadeType.ALL)
+	@OneToOne(cascade = CascadeType.PERSIST)
 	@JoinColumn(name = "room_id", referencedColumnName = "roomNumber")
 	private Room room;
 	
