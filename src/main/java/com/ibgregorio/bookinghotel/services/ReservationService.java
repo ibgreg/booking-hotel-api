@@ -1,5 +1,6 @@
 package com.ibgregorio.bookinghotel.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -11,7 +12,9 @@ import com.ibgregorio.bookinghotel.dto.ReservationDTO;
 import com.ibgregorio.bookinghotel.entity.Customer;
 import com.ibgregorio.bookinghotel.entity.Reservation;
 import com.ibgregorio.bookinghotel.repository.ReservationRepository;
+import com.ibgregorio.bookinghotel.services.exception.DataIntegrityException;
 import com.ibgregorio.bookinghotel.services.exception.ObjectNotFoundException;
+import com.ibgregorio.bookinghotel.services.utils.DateTimeUtil;
 
 @Service
 public class ReservationService {
@@ -40,6 +43,8 @@ public class ReservationService {
 	
 	@Transactional
 	public Reservation placeReservation(Reservation reservation) {
+		validateReservation(reservation);
+		
 		return reservationRepository.save(reservation);
 	}
 	
@@ -47,6 +52,8 @@ public class ReservationService {
 	public Reservation modifyReservation(Reservation reservation) {
 		Reservation modifiedReservation = findReservationById(reservation.getId());
 		updateReservationData(modifiedReservation, reservation);
+		
+		validateReservation(reservation);
 		
 		return reservationRepository.save(modifiedReservation);
 	}
@@ -78,4 +85,23 @@ public class ReservationService {
 		updatedReservation.setStartDate(reservation.getStartDate());
 		updatedReservation.setEndDate(reservation.getEndDate());
 	}
+	
+	private void validateReservation(Reservation reservation) {		
+		if (reservation.getStartDate().isBefore(LocalDateTime.now())) {
+			throw new DataIntegrityException("Please inform a start date greater than current date");
+		}
+		
+		if (reservation.getEndDate().isBefore(reservation.getStartDate())) {
+			throw new DataIntegrityException("End date must be greater than Start date");
+		}
+		
+		if (DateTimeUtil.getAmountDaysBetweenDates(LocalDateTime.now(), reservation.getStartDate()) > 30) {
+			throw new DataIntegrityException("Your reservation start date must be less than 30 days in advance");
+		}
+		
+		if (DateTimeUtil.getAmountDaysBetweenDates(reservation.getStartDate(), reservation.getEndDate()) > 3) {
+			throw new DataIntegrityException("Your stay can't be longer than 3 days");
+		}
+	}
+
 }
