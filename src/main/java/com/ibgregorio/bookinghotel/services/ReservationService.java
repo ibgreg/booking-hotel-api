@@ -41,11 +41,6 @@ public class ReservationService {
 		return reservationRepository.findByCustomer(selectedCustomer);
 	}
 	
-	public Boolean checkActiveReservationByRoomAndStartDate(Reservation reservation) {
-		return reservationRepository.existsActiveReservationByRoomBetweenStartEndDates(
-				reservation.getRoom().getRoomNumber(), reservation.getStartDate(), reservation.getEndDate());
-	}
-	
 	@Transactional
 	public Reservation placeReservation(Reservation reservation) {
 		validateReservation(reservation);
@@ -56,9 +51,9 @@ public class ReservationService {
 	@Transactional
 	public Reservation modifyReservation(Reservation reservation) {
 		Reservation modifiedReservation = findReservationById(reservation.getId());
+		validateReservation(reservation);
 		updateReservationData(modifiedReservation, reservation);
 		
-		validateReservation(reservation);
 		
 		return reservationRepository.save(modifiedReservation);
 	}
@@ -108,7 +103,7 @@ public class ReservationService {
 			throw new DataIntegrityException("Your stay can't be longer than 3 days");
 		}
 		
-		if (checkActiveReservationByRoomAndStartDate(reservation)) {
+		if (roomService.checkRoomAvailabilityOnStartEndDate(reservation.getRoom().getRoomNumber(), reservation.getStartDate(), reservation.getEndDate())) {
 			throw new DataIntegrityException("The selected room is already reserved on informed period");
 		}
 	}
