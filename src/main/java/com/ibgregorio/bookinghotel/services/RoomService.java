@@ -24,10 +24,10 @@ public class RoomService {
 	}
 	
 	public Boolean checkRoomAvailabilityOnStartEndDate(Long roomNumber, LocalDateTime startDate, LocalDateTime endDate) {
-		Room selectedRoom = findRoomByNumber(roomNumber);
+		findRoomByNumber(roomNumber);
 		validateDateFilters(startDate, endDate);
 		
-		return roomRepository.checkRoomAvailabilityOnStartEndDate(selectedRoom.getRoomNumber(), startDate, endDate);
+		return roomRepository.checkRoomAvailabilityOnStartEndDate(roomNumber, startDate, endDate);
 	}
 	
 	private void validateDateFilters(LocalDateTime startDate, LocalDateTime endDate) {	

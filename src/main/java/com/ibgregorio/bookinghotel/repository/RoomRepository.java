@@ -14,11 +14,10 @@ import com.ibgregorio.bookinghotel.entity.Room;
 public interface RoomRepository extends JpaRepository<Room, Long>{
 
 	@Transactional(readOnly = true)
-	@Query("select count(r) > 0 from Room r right join r.reservation reserv "
+	@Query("select count(r) > 0 from Room r join r.reservation reserv "
 			+ "where r.roomNumber = :roomNumber "
-			+ "and (r.reservation is null or (r.reservation is not null "
 			+ "and (:chosenStartDate between reserv.startDate and reserv.endDate "
-			+ "or :chosenEndDate between reserv.startDate and reserv.endDate)))")
+			+ "or :chosenEndDate between reserv.startDate and reserv.endDate)")
 	Boolean checkRoomAvailabilityOnStartEndDate(@Param("roomNumber") Long roomNumber, 
 			@Param("chosenStartDate") LocalDateTime chosenStartDate,
 			@Param("chosenEndDate") LocalDateTime chosenEndDate);
