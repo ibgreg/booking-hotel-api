@@ -66,6 +66,11 @@ public class ReservationService {
 		}
 	}	
 	
+	/**
+	 * Converts the Reservation Data Transfer Object to Entity representation (with the Customer and Room relationships)
+	 * @param reservationDto 
+	 * @return converted Reservation entity
+	 */
 	public Reservation buildEntityFromDTO(ReservationDTO reservationDto) {
 		Reservation reservation = new Reservation(
 				reservationDto.getId(), 
@@ -80,29 +85,43 @@ public class ReservationService {
 		return reservation;
 	}
 	
+	/**
+	 * Updates the fields from existing Reservation with new information
+	 * @param updatedReservation - entity that will be updated
+	 * @param reservation - entity containing the new values
+	 */
 	private void updateReservationData(Reservation updatedReservation, Reservation reservation) {
 		updatedReservation.setRoom(reservation.getRoom());
 		updatedReservation.setStartDate(reservation.getStartDate());
 		updatedReservation.setEndDate(reservation.getEndDate());
 	}
 	
-	private void validateReservation(Reservation reservation) {		
+	/**
+	 * Validates the provided Reservation data before create or update
+	 * @param reservation - Reservation that will be verified
+	 */
+	private void validateReservation(Reservation reservation) {
+		// Checks if informed Start Date is before the current date
 		if (reservation.getStartDate().isBefore(LocalDateTime.now())) {
 			throw new DataIntegrityException("Please inform a start date greater than current date");
 		}
 		
+		// Checks if informed End Date is before the Start date
 		if (reservation.getEndDate().isBefore(reservation.getStartDate())) {
 			throw new DataIntegrityException("End date must be greater than Start date");
 		}
 		
+		// Checks if the reservation start date is scheduled more than 30 days in advance
 		if (DateTimeUtil.getAmountDaysBetweenDates(LocalDateTime.now(), reservation.getStartDate()) > 30) {
 			throw new DataIntegrityException("Your reservation start date must be less than 30 days in advance");
 		}
 		
+		// Checks if the reservation stay period is longer than 3 days
 		if (DateTimeUtil.getAmountDaysBetweenDates(reservation.getStartDate(), reservation.getEndDate()) > 3) {
 			throw new DataIntegrityException("Your stay can't be longer than 3 days");
 		}
 		
+		// Checks if is there any active reservation on the informed period
 		if (roomService.checkRoomAvailabilityOnStartEndDate(reservation.getRoom().getRoomNumber(), reservation.getStartDate(), reservation.getEndDate())) {
 			throw new DataIntegrityException("The selected room is already reserved on informed period");
 		}

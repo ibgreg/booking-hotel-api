@@ -42,6 +42,11 @@ public class CustomerService {
 		return customerRepository.save(modifiedCustomer);
 	}
 	
+	/**
+	 * Converts the Customer Data Transfer Object to Entity representation
+	 * @param customerDto 
+	 * @return converted Customer entity
+	 */
 	public Customer buildEntityFromDTO(CustomerDTO customerDto) {		
 		return new Customer(
 				customerDto.getId(), 
@@ -50,6 +55,11 @@ public class CustomerService {
 				customerDto.getPhoneNumber());
 	}
 	
+	/**
+	 * Updates the fields from existing Customer with new information
+	 * @param modifiedCustomer - entity that will be updated
+	 * @param customer - entity containing the new values
+	 */
 	private void updateReservationData(Customer modifiedCustomer, Customer customer) {
 		modifiedCustomer.setName(customer.getName());
 		modifiedCustomer.setEmail(customer.getEmail());

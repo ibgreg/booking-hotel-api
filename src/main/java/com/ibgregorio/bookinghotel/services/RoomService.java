@@ -30,19 +30,28 @@ public class RoomService {
 		return roomRepository.checkRoomAvailabilityOnStartEndDate(roomNumber, startDate, endDate);
 	}
 	
-	private void validateDateFilters(LocalDateTime startDate, LocalDateTime endDate) {	
+	/**
+	 * Validates the provided Date parameters
+	 * @param startDate
+	 * @param endDate
+	 */
+	private void validateDateFilters(LocalDateTime startDate, LocalDateTime endDate) {
+		// Checks if Start Date is null
 		if (startDate == null) {
 			throw new DataIntegrityException("Start date is required");
 		}
 		
+		// Checks if End Date is null
 		if (endDate == null) {
 			throw new DataIntegrityException("End date is required");
 		}
 		
+		// Checks if informed Start Date is before the current date
 		if (startDate.isBefore(LocalDateTime.now())) {
 			throw new DataIntegrityException("Please inform a start date greater than current date");
 		}
 		
+		// Checks if informed End Date is before the Start date
 		if (endDate.isBefore(startDate)) {
 			throw new DataIntegrityException("End date must be greater than Start date");
 		}
